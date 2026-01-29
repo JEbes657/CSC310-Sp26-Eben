@@ -296,3 +296,25 @@ int bstree::height(treenode *t)
         else
                 return 1 + hR;
 }
+
+void bstree::printBST(treenode* t, int blank)
+{
+    if (t == NULL)
+        return;
+
+    blank += 10;
+
+    printBST(t->rchild, blank);
+
+    cout << endl;
+    for (int i = 10; i < blank; i++)
+        cout << " ";
+    cout << t->dat << "\n";
+
+    printBST(t->lchild, blank);
+}
+
+void bstree::printBST()
+{
+    printBST(root, 0);
+}

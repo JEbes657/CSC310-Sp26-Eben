@@ -72,6 +72,11 @@ int main(int argc, char *argv[])
                         else
                                 cout << "Right side is bigger" << endl;
                 }
+                else if (num1 == 0)
+                {
+                    t.printBST();
+                    cout << endl;
+                }
                 else
                 {
                         break;

@@ -23,6 +23,7 @@ class bstree
         int numnodes(); // must compute, not a variable in class
         int height(); // must compute, not a variable in class
         bool bigger(); //tell which side  is larger
+        void printBST();
  private:
         void in(treenode *t);
         void pre(treenode *t);
@@ -36,4 +37,5 @@ class bstree
         treenode* remove(treenode *t, int x);
         bool bigger(treenode *t);
         treenode *root;
+        void printBST(treenode* t, int blank);
 };
