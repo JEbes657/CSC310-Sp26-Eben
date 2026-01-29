@@ -111,8 +111,8 @@ void bstree::remove( int x )
 
 treenode* bstree::remove(treenode *t, int x)
 {
-        if (t == NULL)
-                return t;
+    if (t == NULL)
+        return t;
 
     if (x < t->dat)
         {
