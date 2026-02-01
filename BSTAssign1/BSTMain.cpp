@@ -77,6 +77,11 @@ int main(int argc, char *argv[])
                     t.printBST();
                     cout << endl;
                 }
+                else if (num1 == -2)
+                {
+                        num3 = t.nodeHeight(num2);
+                        cout << "Node height: " << num3 << endl;
+                }
                 else
                 {
                         break;

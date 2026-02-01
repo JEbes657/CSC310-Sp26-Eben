@@ -24,6 +24,7 @@ class bstree
         int height(); // must compute, not a variable in class
         bool bigger(); //tell which side  is larger
         void printBST();
+        int nodeHeight(int x);
  private:
         void in(treenode *t);
         void pre(treenode *t);

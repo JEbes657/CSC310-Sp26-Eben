@@ -318,3 +318,21 @@ void bstree::printBST()
 {
     printBST(root, 0);
 }
+
+int bstree::nodeHeight(int x)
+{
+    treenode* t = root;
+
+    while (t != NULL)
+    {
+        if (t->dat == x)
+            return height(t);
+
+        if (x < t->dat)
+            t = t->lchild;
+        else
+            t = t->rchild;
+    }
+
+    return -1;
+}
