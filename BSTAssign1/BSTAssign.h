@@ -25,6 +25,7 @@ class bstree
         bool bigger(); //tell which side  is larger
         void printBST();
         int nodeHeight(int x);
+        bool isWorstCase();
  private:
         void in(treenode *t);
         void pre(treenode *t);

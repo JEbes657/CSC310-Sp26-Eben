@@ -13,12 +13,18 @@ int main(int argc, char *argv[])
         fp.open(argv[1]);
 
         int num1, num2, num3;
+        bool worst = false;
 
         while (fp >> num1 >> num2)
         {
                 if (num1 == 1)
                 {
                         t.insert(num2);
+
+                    worst = t.isWorstCase();
+                    if (worst == true)
+                        cout << "Unbalanced tree" << endl;
+                    worst = false;
                 }
                 else if (num1 == 2)
                 {

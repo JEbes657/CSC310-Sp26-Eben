@@ -241,20 +241,6 @@ bool bstree::insert( int val )
 bool bstree::search( int val )
 {
         return searchI(val);
-        //return searchR(root, val);
-}
-
-bool bstree::searchR(treenode *t, int val)
-{
-        if (t->dat == val)
-                return true;
-        if (t == NULL)
-                return false;
-
-        if (val < t->dat)
-                return searchR(t->lchild, val);
-        else
-                return searchR(t->rchild, val);
 }
 
 bool bstree::searchI(int val)
@@ -335,4 +321,17 @@ int bstree::nodeHeight(int x)
     }
 
     return -1;
+}
+
+bool bstree::isWorstCase()
+{
+    int n = numnodes();
+    int h = height();
+
+    if (n < 3)
+        return false;
+    if (h == n)
+        return true;
+    else
+        return false;
 }
