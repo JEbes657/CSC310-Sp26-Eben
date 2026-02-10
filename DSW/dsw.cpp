@@ -37,12 +37,42 @@ void BST::rotateLeft(Node*& node)
 // Phase 1 - right skewed linked list tree
 void BST::createVine()
 {
+    if (root == nullptr)
+        return;
 
+    Node* grandparent = nullptr;
+    Node* parent = root;
+    Node* child = root->left;
+
+    while (parent != nullptr)
+    {
+        if (child != nullptr)
+        {
+            rotateRight(parent);
+            if (grandparent == nullptr)
+                root = parent;
+            else
+                grandparent->right = parent;
+            child = parent->left;
+        }
+        else
+        {
+            grandparent = parent;
+            parent = parent->right;
+            if (parent != nullptr)
+                child = parent->left;
+        }
+    }   
 }
 
 void BST::rebuildTree(int size)
 {
+    // how many left rotations do we need
 
+    //Initial rotations = extra node at the last not-full level
+    int h = (int)log2(size + 1);
+    int m = (1 << h) - 1; // number of node in perfect subtree
+    int extra = size - m; // extra nodes
 }
 
 // left rotate every second node based count
