@@ -69,16 +69,46 @@ void BST::rebuildTree(int size)
 {
     // how many left rotations do we need
 
-    //Initial rotations = extra node at the last not-full level
     int h = (int)log2(size + 1);
     int m = (1 << h) - 1; // number of node in perfect subtree
+
     int extra = size - m; // extra nodes
+
+    //Initial rotations = extra node at the last not-full level
+    performRotation(extra);
+
+    // Subsequent rotations
+    for (size = m / 2; size > 0; size /= 2)
+    {
+        performRotation(size);
+    }
 }
 
 // left rotate every second node based count
 void BST::performRotation(int count)
 {
+    Node* grandparent = nullptr;
+    Node* parent = root;
 
+    for(int i = 0; i < count && parent != nullptr && parent->right != nullptr; i++)
+    {
+        if (i % 2 == 1) // odd position
+        {
+            if (grandparent == nullptr)
+            {
+                rotateLeft(root);
+                parent = root;
+            }
+            else
+            {
+                rotateLeft(grandparent->right);
+                parent = grandparent->right;
+            }
+        }
+
+        grandparent = parent;
+        parent = parent->right;
+    }
 }
 
 void BST::printTree(Node* root, int space) {
@@ -155,7 +185,21 @@ void BST::insert(int val)
 
 void BST::dswBalance()
 {
+    if (root == nullptr)
+        return;
 
+    createVine();
+
+    cout << "After phase 1:";
+    display();
+
+    int size = 0;
+    Node* temp = root;
+    while(temp != nullptr)
+    {
+        size++;
+        temp = temp->right;
+    }
 }
 
 void BST::display()
