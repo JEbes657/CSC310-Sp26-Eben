@@ -1,6 +1,8 @@
 #include "splay.h"
 #include "customErrorClass.h"
 
+// this is the bottom up implimentation of the splay tree
+
 SplayTree::SplayTree() 
 {
     root = nullptr; 
