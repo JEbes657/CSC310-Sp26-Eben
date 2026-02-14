@@ -1,9 +1,9 @@
-INCLUDE_DIRS := Bottom-Up
+INCLUDE_DIRS := Splay
 CC 			 := g++
 CFLAGS 		 := -I$(INCLUDE_DIRS)
 
 OBJS 		 := customErrorClass.o customErrorHandling.o
-DEPS 		 := ${INCLUDE_DIRS}
+DEPS 		 := ${INCLUDE_DIRS}/Bottom-Up
 
 .PHONY: clean all
 
@@ -23,3 +23,6 @@ mainsplay.o: mainsplay.cpp ${DEPS}
 
 splay.o: splay.cpp ${DEPS}
 	$(CC) -c -o $@ $(CFLAGS) $<
+
+errorTutorial: $(OBJS)
+	$(CC) -o $@ $^ $(CFLAGS)

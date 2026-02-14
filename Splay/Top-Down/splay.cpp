@@ -113,9 +113,47 @@ SplayTree::Node* SplayTree::insertNode(Node* root, int key) {
 
 
 SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
-    
+    if (root == nullptr)
+        return nullptr;
+
+    root = splay(root, key);
+
+    if (root->key != key)
+        return root;
+
+    if (root->left == nullptr)
+    {
+        Node* temp = root->right;
+        delete root;
+        return temp;
+    }
+
+    if (root->right == nullptr)
+    {
+        Node* temp = root->left;
+        delete root;
+        return temp;
+    }
+
+    Node* leftSubtree = root->left;
+    Node* rightSubtree = root->right;
+
+    leftSubtree = splay(leftSubtree, key);
+
+    leftSubtree->right = rightSubtree;
+
+    delete root;
+    return leftSubtree;
 }
 
+SplayTree::Node* SplayTree::searchNode(Node* root, int key) {
+    if (root == nullptr)
+        return nullptr;
+
+    root = splay(root, key);
+
+    return root;
+}
 
 void SplayTree::insert(int key) {
     root = insertNode(root, key);
@@ -128,7 +166,7 @@ void SplayTree::remove(int key) {
 
 
 bool SplayTree::search(int key) {
-    root = splay(root, key);
+    root = searchNode(root, key);
     return (root && root->key == key);
 }
 

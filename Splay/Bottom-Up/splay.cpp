@@ -115,7 +115,14 @@ SplayTree::Node* SplayTree::insertNode(Node* root, int key) {
 
 
 SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
+    if (root == nullptr)
+        return nullptr;
     
+    root = splay(root, key); // splay the closest value to be the new root
+
+    
+
+
 }
 
 
