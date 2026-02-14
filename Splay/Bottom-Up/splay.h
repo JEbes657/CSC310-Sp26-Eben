@@ -21,7 +21,7 @@ class SplayTree {
 
         Node* rotateRight(Node* x);
         Node* rotateLeft(Node* x);
-        Node* splay(Node* root, int key);
+        Node* splay(Node* x, int key);
         Node* insertNode(Node* root, int key);
         Node* deleteNode(Node* root, int key);
 
