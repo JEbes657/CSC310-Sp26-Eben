@@ -150,9 +150,11 @@ SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
 
     Node* leftSub = root->left;
     Node* rightSub = root->right;
-
+    
     Node* maxNode = leftSub;
-    while (maxNode->right != nullptr) {
+
+    while (maxNode->right != nullptr)
+    {
         maxNode = maxNode->right;
     }
     
