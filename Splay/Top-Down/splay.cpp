@@ -92,6 +92,8 @@ SplayTree::Node* SplayTree::splay(Node* root, int key) {
         else
             return rotateLeft(root);
     }
+
+    return root;
 }
 
 
@@ -124,7 +126,7 @@ SplayTree::Node* SplayTree::insertNode(Node* root, int key) {
 
 
 SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
-/*   if (root == nullptr)
+   if (root == nullptr)
         return nullptr;
 
     root = splay(root, key);
@@ -154,9 +156,7 @@ SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
     leftSubtree->right = rightSubtree;
 
     delete root;
-    return leftSubtree; */
-
-    return nullptr;
+    return leftSubtree;
 }
 
 SplayTree::Node* SplayTree::searchNode(Node* root, int key) {

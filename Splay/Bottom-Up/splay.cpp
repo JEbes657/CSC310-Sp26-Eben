@@ -3,6 +3,18 @@
 
 // this is the bottom up implimentation of the splay tree
 
+MyException::MyException(void){
+    this->errString = "No Error Set";
+}
+
+MyException::MyException(const string &err){
+    this->errString = err;
+}
+
+MyException::MyException(const char *err){
+    this->errString = err;
+}
+
 SplayTree::SplayTree() 
 {
     root = nullptr; 

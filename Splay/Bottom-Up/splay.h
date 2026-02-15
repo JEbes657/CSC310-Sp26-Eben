@@ -35,4 +35,16 @@ class SplayTree {
         void display();
 };
 
+class MyException : public exception {
+    public:
+        MyException(void);
+        MyException(const char*);
+        MyException(const string&);
+        virtual const string what(){
+            return this->errString;
+        }
+    private:
+        string errString;
+};
+
 #endif 
