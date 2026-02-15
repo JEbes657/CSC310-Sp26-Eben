@@ -10,10 +10,12 @@ class SplayTree {
             int key;
             Node* left;
             Node* right;
+            Node* parent;
             Node(int k) {
                 key = k;
                 left = nullptr;
                 right = nullptr; 
+                parent = nullptr;
             }
         };
 
@@ -21,8 +23,10 @@ class SplayTree {
 
         Node* rotateRight(Node* x);
         Node* rotateLeft(Node* x);
-        Node* splay(Node* x, int key);
-        Node* insertNode(Node* root, int key);
+        //Node* splay(Node* x, int key);
+        void splay(Node* x);
+        //Node* insertNode(Node* root, int key);
+        void insertNode(int key);
         Node* deleteNode(Node* root, int key);
 
         void printTree(Node* root, int space);

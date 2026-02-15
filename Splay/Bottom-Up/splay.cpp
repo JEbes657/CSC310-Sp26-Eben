@@ -24,122 +24,205 @@ SplayTree::SplayTree()
 SplayTree::Node* SplayTree::rotateRight(Node* x) {
     Node* y = x->left;
     x->left = y->right;
+    // ------------------
+    if (y->right)
+        y->right->parent = x;
+
+    y->parent = x->parent;
+
+    if (x->parent)
+    {
+        if (x->parent->left == x)
+            x->parent->left = y;
+        else
+            x->parent->right = y;
+    }
+    // ------------------
+
     y->right = x;
+    // ------------------
+    x->parent = y;
+    // ------------------
     return y;
 }
 
 // aka Zag
 SplayTree::Node* SplayTree::rotateLeft(Node* x) {
-
     Node* y = x->right;
     x->right = y->left;
-    y->right = x;
+    // ------------------
+    if (y->left)
+        y->left->parent = x;
+
+    y->parent = x->parent;
+
+    if (x->parent)
+    {
+        if (x->parent->right == x)
+            x->parent->right = y;
+        else
+            x->parent->left = y;
+    }
+    // ------------------
+
+    y->left = x;
+    // ------------------
+    x->parent = y;
+    // ------------------
     return y;
 }
 
 // Splaying :)
-// top-down approach
-SplayTree::Node* SplayTree::splay(Node* root, int key) {
-    
-    if (root == nullptr || root->key == key)
-        return root;
-    
-    //key in left subtree
-    if (key < root->key)
+// bottom-up approach
+void SplayTree::splay(Node* x) {
+    if (x == nullptr)
+        return;
+
+    while(x->parent != nullptr)
     {
-        if (root->left == nullptr)
-            return root;
+        Node* p = x->parent;
+        Node* g = p->parent;
 
-        // Zig Zig
-        if (key < root->left->key)
+        if (!g)
         {
-            root->left->left = splay(root->left->left, key);
-            root = rotateRight(root);
+            if (p->left == x)
+                rotateRight(p);
+            else
+                rotateLeft(p);
         }
-        // Zig Zag
-        else if (key > root->left->key)
+
+        else if (g->left == p && p->left == x)
         {
-            root->left->right = splay(root->left->right, key);
-            if (root->left->right != nullptr)
-                root->left = rotateLeft(root->left);
+            rotateRight(g);
+            rotateLeft(g);
         }
-        
-        if (root->left == nullptr)
-            return root;
+        else if (g->right == p && p->right == x)
+        {
+            rotateLeft(g);
+            rotateLeft(p);
+        }
+        else if (g->left == p && p->right == x)
+        {
+            rotateLeft(p);
+            rotateRight(p);
+        }
         else
-            return rotateRight(root);
-    }
-
-    //key in right subtree
-    if (key > root->key)
-    {
-        if (root->right == nullptr)
-            return root;
-
-        // Zag Zag
-        if (key > root->right->key)
         {
-            root->right->right = splay(root->right->right, key);
-            root = rotateRight(root);
+            rotateRight(p);
+            rotateLeft(g);
         }
-        //Zag Zig
-        else if (key < root->right->key)
-        {
-            root->right->left = splay(root->right->left, key);
-            if (root->right->left!= nullptr)
-                root->right = rotateRight(root->right);
-        }
-        
-        if (root->right == nullptr)
-            return root;
-        else
-            return rotateLeft(root);
     }
+    root = x;    
 }
 
 //1 pass
-SplayTree::Node* SplayTree::insertNode(Node* root, int key) {
-    if (root == nullptr)
-        return new Node(key);
-    
-    root = splay(root, key); // splay the closest value to be the new root
-
-    if (root->key == key)
-        return root;
-
-    Node* newNode = new Node(key);
-
-    if (key < root->key)
+void SplayTree::insertNode(int key) {
+    if(!root)
     {
-        newNode->right = root;
-        newNode->left = root->left;
-        root->left == nullptr;
+        root = new Node(key);
+        return;
     }
+
+    Node* curr = root;
+    Node* parent = nullptr;
+
+    while(curr)
+    {
+        parent = curr;
+        if (key == curr->key)
+            throw MyException("Duplicate Key");
+        if (key < curr->key)
+            curr = curr->left;
+        else
+            curr = curr->right;
+    }
+
+    Node* n = new Node(key);
+    n->parent = parent;
+
+    if (key < parent->key)
+        parent->left = n;
     else
-    {
-        newNode->left = root;
-        newNode->right = root->right;
-        root->right = nullptr;
-    }
-
-    return newNode;
+        parent->right = n;
+    
+    splay(n);
 }
 
-
 SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
-    if (root == nullptr)
+    if (root == nullptr) 
         return nullptr;
     
-    root = splay(root, key); // splay the closest value to be the new root
-
+    Node* curr = root;
+    while (curr != nullptr) 
+    {
+        if (key < curr->key) 
+        {
+            curr = curr->left;
+        } 
+        else if (key > curr->key) 
+        {
+            curr = curr->right;
+        } 
+        else 
+        {
+            break;
+        }
+    }
     
+    if (curr == nullptr || curr->key != key) 
+    {
+        return root;
+    }
+    
+    splay(curr);
+    
+    if (curr->left == nullptr && curr->right == nullptr) 
+    {
+        delete curr;
+        return nullptr;
+    }
+    else if (curr->left == nullptr) 
+    {
+        Node* newRoot = curr->right;
+        newRoot->parent = nullptr;
+        delete curr;
+        return newRoot;
+    }
+    else if (curr->right == nullptr) 
+    {
+        Node* newRoot = curr->left;
+        newRoot->parent = nullptr;
+        delete curr;
+        return newRoot;
+    }
+    else 
+    {
+        Node* maxLeft = curr->left;
+        while (maxLeft->right != nullptr) 
+        {
+            maxLeft = maxLeft->right;
+        }
+        
+        Node* leftSubtree = curr->left;
+        Node* rightSubtree = curr->right;
+        leftSubtree->parent = nullptr;
+        rightSubtree->parent = nullptr;
+        
+        delete curr;
+        
+        root = leftSubtree;
+        splay(maxLeft);
 
-
+        maxLeft->right = rightSubtree;
+        rightSubtree->parent = maxLeft;
+        
+        return maxLeft;
+    }
 }
 
 
 void SplayTree::insert(int key) {
-    root = insertNode(root, key);
+    insertNode(key);
 }
 
 
@@ -149,7 +232,7 @@ void SplayTree::remove(int key) {
 
 
 bool SplayTree::search(int key) {
-    root = splay(root, key);
+    splay(root);
     return (root && root->key == key);
 }
 
