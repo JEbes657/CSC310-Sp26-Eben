@@ -83,7 +83,7 @@ SplayTree::Node* SplayTree::splay(Node* root, int key) {
         else if (key < root->right->key)
         {
             root->right->left = splay(root->right->left, key);
-            if (root->right->left!= nullptr)
+            if (root->right->left != nullptr)
                 root->right = rotateRight(root->right);
         }
         
@@ -92,9 +92,6 @@ SplayTree::Node* SplayTree::splay(Node* root, int key) {
         else
             return rotateLeft(root);
     }
-    
-
-    return root;
 }
 
 
@@ -127,7 +124,7 @@ SplayTree::Node* SplayTree::insertNode(Node* root, int key) {
 
 
 SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
-    if (root == nullptr)
+/*   if (root == nullptr)
         return nullptr;
 
     root = splay(root, key);
@@ -157,7 +154,9 @@ SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
     leftSubtree->right = rightSubtree;
 
     delete root;
-    return leftSubtree;
+    return leftSubtree; */
+
+    return nullptr;
 }
 
 SplayTree::Node* SplayTree::searchNode(Node* root, int key) {
@@ -169,7 +168,7 @@ SplayTree::Node* SplayTree::searchNode(Node* root, int key) {
     return root;
 }
 
-SplayTree::Node* SplayTree::semiSplay(Node* root, int key, int limit) {
+/*SplayTree::Node* SplayTree::semiSplay(Node* root, int key, int limit) {
     if (root == nullptr || root->key == key || limit <= 0)
         return root;
 
@@ -227,7 +226,7 @@ SplayTree::Node* SplayTree::semiSplay(Node* root, int key, int limit) {
 
     
     return root;
-}
+}*/
 
 void SplayTree::insert(int key) {
     root = insertNode(root, key);
