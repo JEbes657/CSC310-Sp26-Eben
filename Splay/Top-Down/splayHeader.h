@@ -25,7 +25,7 @@ class SplayTree {
         Node* insertNode(Node* root, int key);
         Node* deleteNode(Node* root, int key);
         Node* searchNode(Node* root, int key);
-
+        Node* semiSplay(Node* root, int key, int limit);
         void printTree(Node* root, int space);
 
     public:
@@ -34,6 +34,18 @@ class SplayTree {
         void remove(int key);
         bool search(int key);
         void display();
+};
+
+class MyException : public exception {
+    public:
+        MyException(void);
+        MyException(const char*);
+        MyException(const string&);
+        virtual const string what(){
+            return this->errString;
+        }
+    private:
+        string errString;
 };
 
 #endif 

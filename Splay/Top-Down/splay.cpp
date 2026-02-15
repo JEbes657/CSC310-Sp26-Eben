@@ -1,5 +1,16 @@
-#include "splay.h"
-#include "customErrorClass.h"
+#include "splayHeader.h"
+
+MyException::MyException(void){
+    this->errString = "No Error Set";
+}
+
+MyException::MyException(const string &err){
+    this->errString = err;
+}
+
+MyException::MyException(const char *err){
+    this->errString = err;
+}
 
 SplayTree::SplayTree() 
 {
@@ -66,7 +77,7 @@ SplayTree::Node* SplayTree::splay(Node* root, int key) {
         if (key > root->right->key)
         {
             root->right->right = splay(root->right->right, key);
-            root = rotateRight(root);
+            root = rotateLeft(root);
         }
         //Zag Zig
         else if (key < root->right->key)
@@ -81,9 +92,12 @@ SplayTree::Node* SplayTree::splay(Node* root, int key) {
         else
             return rotateLeft(root);
     }
+    
+
+    return root;
 }
 
-//1 pass
+
 SplayTree::Node* SplayTree::insertNode(Node* root, int key) {
     if (root == nullptr)
         return new Node(key);
@@ -99,7 +113,7 @@ SplayTree::Node* SplayTree::insertNode(Node* root, int key) {
     {
         newNode->right = root;
         newNode->left = root->left;
-        root->left == nullptr;
+        root->left = nullptr;
     }
     else
     {
@@ -152,6 +166,66 @@ SplayTree::Node* SplayTree::searchNode(Node* root, int key) {
 
     root = splay(root, key);
 
+    return root;
+}
+
+SplayTree::Node* SplayTree::semiSplay(Node* root, int key, int limit) {
+    if (root == nullptr || root->key == key || limit <= 0)
+        return root;
+
+    //key in left subtree
+    if (key < root->key)
+    {
+        if (root->left == nullptr)
+            return root;
+
+        // Zig Zig
+        if (key < root->left->key)
+        {
+            root->left->left = semiSplay(root->left->left, key, limit - 1);
+            root = rotateRight(root);
+        }
+        // Zig Zag
+        else if (key > root->left->key)
+        {
+            root->left->right = semiSplay(root->left->right, key, limit - 1);
+            if (root->left->right != nullptr)
+                root->left = rotateLeft(root->left);
+        }
+        
+        if (root->left == nullptr)
+            return root;
+        else
+            return rotateRight(root);
+    }
+
+    //key in right subtree
+    if (key > root->key)
+    {
+        if (root->right == nullptr)
+            return root;
+
+        // Zag Zag
+        if (key > root->right->key)
+        {
+            root->right->right = semiSplay(root->right->right, key, limit - 1);
+            root = rotateLeft(root);
+        }
+        //Zag Zig
+        else if (key < root->right->key)
+        {
+            root->right->left = semiSplay(root->right->left, key, limit - 1);
+            if (root->right->left!= nullptr)
+                root->right = rotateRight(root->right);
+        }
+        
+        if (root->right == nullptr)
+            return root;
+        else
+            return rotateLeft(root);
+    }
+
+    
     return root;
 }
 

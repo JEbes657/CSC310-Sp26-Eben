@@ -1,4 +1,4 @@
-#include "splay.h"
+#include "splayHeader.h"
 
 int main() {
     SplayTree tree;
