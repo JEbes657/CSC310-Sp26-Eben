@@ -84,27 +84,31 @@ void SplayTree::splay(Node* x) {
 
         if (!g)
         {
+            // Zig or Zag
             if (p->left == x)
                 rotateRight(p);
             else
                 rotateLeft(p);
         }
-
+        // Zig-Zig
         else if (g->left == p && p->left == x)
         {
             rotateRight(g);
-            rotateLeft(g);
+            rotateRight(p);
         }
+        // Zag-Zag
         else if (g->right == p && p->right == x)
         {
             rotateLeft(g);
             rotateLeft(p);
         }
+        // Zig-Zag
         else if (g->left == p && p->right == x)
         {
             rotateLeft(p);
-            rotateRight(p);
+            rotateRight(g);
         }
+        // Zag-Zig
         else
         {
             rotateRight(p);
@@ -219,6 +223,36 @@ SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
     }
 }
 
+SplayTree::Node* SplayTree::searchNode(int key) {
+    if (root == nullptr) 
+        return nullptr;
+    
+    Node* curr = root;
+    Node* lastNode = root;
+    
+    while (curr != nullptr) 
+    {
+        lastNode = curr;
+        
+        if (key < curr->key) 
+        {
+            curr = curr->left;
+        } 
+        else if (key > curr->key) 
+        {
+            curr = curr->right;
+        } 
+        else 
+        {
+            splay(curr);
+            return curr;
+        }
+    }
+    splay(lastNode);
+
+    return nullptr;
+}
+
 
 void SplayTree::insert(int key) {
     insertNode(key);
@@ -231,8 +265,8 @@ void SplayTree::remove(int key) {
 
 
 bool SplayTree::search(int key) {
-    splay(root);
-    return (root && root->key == key);
+    Node* searched = searchNode(key);
+    return (searched != nullptr && searched->key == key);
 }
 
 

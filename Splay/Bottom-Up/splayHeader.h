@@ -28,6 +28,7 @@ class SplayTree {
         //Node* insertNode(Node* root, int key);
         void insertNode(int key);
         Node* deleteNode(Node* root, int key);
+        Node* searchNode(int key);
 
         void printTree(Node* root, int space);
 

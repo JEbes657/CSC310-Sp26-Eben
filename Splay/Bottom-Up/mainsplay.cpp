@@ -14,7 +14,7 @@ int main() {
     tree.display();
 
     tree.search(44);
-    cout << "Tree after splaying 40: ";
+    cout << "Tree after splaying 44: ";
     tree.display();
 
     tree.remove(31);
