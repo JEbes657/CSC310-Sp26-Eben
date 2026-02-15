@@ -150,7 +150,7 @@ SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
 
     Node* leftSub = root->left;
     Node* rightSub = root->right;
-    
+
     Node* maxNode = leftSub;
 
     while (maxNode->right != nullptr)
@@ -170,14 +170,67 @@ SplayTree::Node* SplayTree::searchNode(Node* root, int key) {
     if (root == nullptr)
         return nullptr;
 
-    root = splay(root, key);
+    root = semiSplay(root, key, 3);
 
     return root;
 }
 
-//SplayTree::Node* SplayTree::semiSplay(Node* root, int key, int limit) {
+SplayTree::Node* SplayTree::semiSplay(Node* root, int key, int limit) {
+    if (root == nullptr || root->key == key || limit <= 0)
+        return root;
 
-//}
+    if (key < root->key)
+    {
+        if (root->left == nullptr)
+            return root;
+
+        // Zig Zig
+        if (key < root->left->key)
+        {
+            root->left->left = semiSplay(root->left->left, key, limit - 1);
+            root = rotateRight(root);
+        }
+        // Zig Zag
+        else if (key > root->left->key)
+        {
+            root->left->right = semiSplay(root->left->right, key, limit - 1);
+            if (root->left->right != nullptr)
+                root = rotateLeft(root->left);
+        }
+        
+        if (root->left == nullptr || limit <= 1)
+            return root;
+        else
+            return rotateRight(root);
+    }
+
+    if (key > root->key)
+    {
+        if (root->right == nullptr)
+            return root;
+
+        // Zag Zag
+        if (key > root->right->key)
+        {
+            root->right->right = semiSplay(root->right->right, key, limit - 1);
+            root = rotateLeft(root);
+        }
+        // Zag Zig
+        else if (key < root->right->key)
+        {
+            root->right->left = semiSplay(root->right->left, key, limit - 1);
+            if (root->right->left != nullptr)
+                root->right = rotateRight(root->right);
+        }
+
+        if (root->right == nullptr || limit <= 1)
+            return root;
+        else
+            return rotateLeft(root);
+    }
+
+    return root;
+}
 
 void SplayTree::insert(int key) {
     root = insertNode(root, key);
