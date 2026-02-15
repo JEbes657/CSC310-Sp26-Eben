@@ -30,7 +30,7 @@ SplayTree::Node* SplayTree::rotateLeft(Node* x) {
 
     Node* y = x->right;
     x->right = y->left;
-    y->right = x;
+    y->left = x;
     return y;
 }
 
@@ -126,7 +126,7 @@ SplayTree::Node* SplayTree::insertNode(Node* root, int key) {
 
 
 SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
-   if (root == nullptr)
+    if (root == nullptr)
         return nullptr;
 
     root = splay(root, key);
@@ -148,15 +148,20 @@ SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
         return temp;
     }
 
-    Node* leftSubtree = root->left;
-    Node* rightSubtree = root->right;
+    Node* leftSub = root->left;
+    Node* rightSub = root->right;
 
-    leftSubtree = splay(leftSubtree, key);
+    Node* maxNode = leftSub;
+    while (maxNode->right != nullptr) {
+        maxNode = maxNode->right;
+    }
+    
+    leftSub = splay(leftSub, maxNode->key);
 
-    leftSubtree->right = rightSubtree;
+    leftSub->right = rightSub;
 
     delete root;
-    return leftSubtree;
+    return leftSub;
 }
 
 SplayTree::Node* SplayTree::searchNode(Node* root, int key) {
@@ -168,65 +173,9 @@ SplayTree::Node* SplayTree::searchNode(Node* root, int key) {
     return root;
 }
 
-/*SplayTree::Node* SplayTree::semiSplay(Node* root, int key, int limit) {
-    if (root == nullptr || root->key == key || limit <= 0)
-        return root;
+//SplayTree::Node* SplayTree::semiSplay(Node* root, int key, int limit) {
 
-    //key in left subtree
-    if (key < root->key)
-    {
-        if (root->left == nullptr)
-            return root;
-
-        // Zig Zig
-        if (key < root->left->key)
-        {
-            root->left->left = semiSplay(root->left->left, key, limit - 1);
-            root = rotateRight(root);
-        }
-        // Zig Zag
-        else if (key > root->left->key)
-        {
-            root->left->right = semiSplay(root->left->right, key, limit - 1);
-            if (root->left->right != nullptr)
-                root->left = rotateLeft(root->left);
-        }
-        
-        if (root->left == nullptr)
-            return root;
-        else
-            return rotateRight(root);
-    }
-
-    //key in right subtree
-    if (key > root->key)
-    {
-        if (root->right == nullptr)
-            return root;
-
-        // Zag Zag
-        if (key > root->right->key)
-        {
-            root->right->right = semiSplay(root->right->right, key, limit - 1);
-            root = rotateLeft(root);
-        }
-        //Zag Zig
-        else if (key < root->right->key)
-        {
-            root->right->left = semiSplay(root->right->left, key, limit - 1);
-            if (root->right->left!= nullptr)
-                root->right = rotateRight(root->right);
-        }
-        
-        if (root->right == nullptr)
-            return root;
-        else
-            return rotateLeft(root);
-    }
-
-    
-    return root;
-}*/
+//}
 
 void SplayTree::insert(int key) {
     root = insertNode(root, key);
