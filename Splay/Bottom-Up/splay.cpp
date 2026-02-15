@@ -1,5 +1,4 @@
-#include "splay.h"
-#include "customErrorClass.h"
+#include "splayHeader.h"
 
 // this is the bottom up implimentation of the splay tree
 
