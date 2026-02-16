@@ -20,10 +20,10 @@ vector<int> readFile(string filename) {
 
 int main() {
     // Read the files
-    vector<int> seq = readFile("../access_pattern/sequential.txt");
-    vector<int> uni = readFile("../access_pattern/uniform.txt");
-    vector<int> skew = readFile("../access_pattern/skewed.txt");
-    vector<int> work = readFile("../access_pattern/workingset.txt");
+    vector<int> seq = readFile("../accessPattern/sequential.txt");
+    vector<int> uni = readFile("../accessPattern/uniform_random.txt");
+    vector<int> skew = readFile("../accessPattern/zipf_skewed.txt");
+    vector<int> work = readFile("../accessPattern/working_set.txt");
     
     // Test sequential pattern
     cout << "Sequential Pattern:" << endl;
