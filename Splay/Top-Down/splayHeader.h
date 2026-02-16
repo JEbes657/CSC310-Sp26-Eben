@@ -19,6 +19,13 @@ class SplayTree {
             }
         };
 
+        int rotations;
+        int totaldepth;
+        int searchCount;
+
+        void resetNumbers();
+        int getDepth(Node* root, int key, int depth);
+
         Node* root;
 
         Node* rotateRight(Node* x);
@@ -37,6 +44,13 @@ class SplayTree {
         void remove(int key);
         bool search(int key);
         void display();
+
+        void displayNumbers();
+        int findRotations();
+        int findDepth();
+        void benchmarkSearch(int key);  // For regular splay
+        void benchmarkSemiSearch(int key, int limit);  // For semi-splay
+        void benchmarkWeightedSearch(int key);  // For weighted splay
 };
 
 class MyException : public exception {
