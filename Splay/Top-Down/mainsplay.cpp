@@ -10,6 +10,7 @@ using namespace chrono;
 vector<int> readFile(string filename) {
     vector<int> nums;
     ifstream file(filename);
+
     int n;
     while (file >> n) {
         nums.push_back(n);

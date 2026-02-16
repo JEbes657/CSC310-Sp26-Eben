@@ -108,7 +108,7 @@ SplayTree::Node* SplayTree::insertNode(Node* root, int key) {
     root = splay(root, key);
 
     if (root->key == key)
-        throw MyException("Duplicate key: cannot insert");
+        return root;
 
     Node* newNode = new Node(key);
 
@@ -131,12 +131,12 @@ SplayTree::Node* SplayTree::insertNode(Node* root, int key) {
 
 SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
     if (root == nullptr)
-        throw MyException("Cannot delete from empty tree");
+        return nullptr;
 
     root = splay(root, key);
 
     if (root->key != key)
-        throw MyException("Key not found: cannot delete");
+        return root;
 
     root = splay(root, key);
 
