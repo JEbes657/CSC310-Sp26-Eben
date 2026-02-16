@@ -105,10 +105,10 @@ SplayTree::Node* SplayTree::insertNode(Node* root, int key) {
     if (root == nullptr)
         return new Node(key);
     
-    root = splay(root, key); // splay the closest value to be the new root
+    root = splay(root, key);
 
     if (root->key == key)
-        return root;
+        throw MyException("Duplicate key: cannot insert");
 
     Node* newNode = new Node(key);
 
@@ -131,7 +131,12 @@ SplayTree::Node* SplayTree::insertNode(Node* root, int key) {
 
 SplayTree::Node* SplayTree::deleteNode(Node* root, int key) {
     if (root == nullptr)
-        return nullptr;
+        throw MyException("Cannot delete from empty tree");
+
+    root = splay(root, key);
+
+    if (root->key != key)
+        throw MyException("Key not found: cannot delete");
 
     root = splay(root, key);
 
@@ -324,6 +329,9 @@ void SplayTree::remove(int key) {
 }
 
 bool SplayTree::search(int key) {
+    if (root == nullptr)
+        throw MyException("Cannot search in empty tree");
+        
     root = searchNode(root, key);
     return (root && root->key == key);
 }
@@ -422,4 +430,9 @@ int SplayTree::findRotations() {
 int SplayTree::findDepth() {
     if (searchCount == 0) return 0;
     return totaldepth / searchCount;
+}
+
+bool SplayTree::weightedSearch(int key) {
+    root = weightedSplay(root, key);
+    return (root && root->key == key);
 }

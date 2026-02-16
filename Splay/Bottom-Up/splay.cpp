@@ -16,11 +16,15 @@ MyException::MyException(const char *err){
 
 SplayTree::SplayTree() 
 {
-    root = nullptr; 
+    root = nullptr;
+    rotations = 0;
+    totaldepth = 0;
+    searchCount = 0;
 }
 
 // aka Zig
 SplayTree::Node* SplayTree::rotateRight(Node* x) {
+    rotations++;
     Node* y = x->left;
     x->left = y->right;
     // ------------------
@@ -47,6 +51,7 @@ SplayTree::Node* SplayTree::rotateRight(Node* x) {
 
 // aka Zag
 SplayTree::Node* SplayTree::rotateLeft(Node* x) {
+    rotations++;
     Node* y = x->right;
     x->right = y->left;
     // ------------------
@@ -297,4 +302,51 @@ void SplayTree::printTree(Node* root, int space) {
 void SplayTree::display() {
     printTree(root, 0);
     cout << endl;
+}
+
+void SplayTree::resetNumbers() {
+    rotations = 0;
+    totaldepth = 0;
+    searchCount = 0;
+}
+
+int SplayTree::findDepth(Node* root, int key, int depth) {
+    if (root == nullptr)
+        return -1;
+
+    if (root->key == key)
+        return depth;
+
+    if (key < root->key)
+        return findDepth(root->left, key, depth + 1);
+    else
+        return findDepth(root->right, key, depth + 1);
+}
+
+void SplayTree::benchmarkSearch(int key) {
+    int depth = findDepth(root, key, 0);
+    if (depth >= 0)
+    {
+        totaldepth += depth;
+        searchCount++;
+    }
+    Node* result = searchNode(key);
+}
+
+void SplayTree::displayNumbers() {
+    cout << "Rotations: " << rotations << endl;
+    cout << "Searches: " << searchCount << endl;
+    if (searchCount > 0)
+    {
+        cout << "Search Depth: " << (double)totaldepth / searchCount << endl;
+    }
+}
+
+int SplayTree::findRotations() {
+    return rotations;
+}
+
+int SplayTree::findDepth() {
+    if (searchCount == 0) return 0;
+    return totaldepth / searchCount;
 }

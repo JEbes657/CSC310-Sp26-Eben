@@ -32,12 +32,23 @@ class SplayTree {
 
         void printTree(Node* root, int space);
 
+        int rotations;
+        int totaldepth;
+        int searchCount;
+
+        int findDepth(Node* root, int key, int depth);
     public:
         SplayTree();
         void insert(int key);
         void remove(int key);
         bool search(int key);
         void display();
+
+        void resetNumbers();
+        void benchmarkSearch(int key);
+        void displayNumbers();
+        int findRotations();
+        int findDepth();
 };
 
 class MyException : public exception {
