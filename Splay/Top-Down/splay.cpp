@@ -232,21 +232,97 @@ SplayTree::Node* SplayTree::semiSplay(Node* root, int key, int limit) {
     return root;
 }
 
+SplayTree::Node* SplayTree::weightedSplay(Node* root, int key) {
+    if (root == nullptr || root->key == key) 
+    {
+        if (root != nullptr && root->key == key) 
+        {
+            root->weight++;
+        }
+        return root;
+    }
+    
+    if (key < root->key) 
+    {
+        if (root->left == nullptr)
+            return root;
+
+        // Zig Zig
+        if (key < root->left->key)
+        {
+            root->left->left = weightedSplay(root->left->left, key);
+            
+            if (root->left->left != nullptr && root->left->left->weight >= root->left->weight) 
+            {
+                root = rotateRight(root);
+            }
+        }
+        // Zig Zag
+        else if (key > root->left->key) 
+        {
+            root->left->right = weightedSplay(root->left->right, key);
+            
+            if (root->left->right != nullptr && root->left->right->weight >= root->left->weight) 
+            {
+                root->left = rotateLeft(root->left);
+            }
+        }
+
+        if (root->left != nullptr && root->left->weight >= root->weight)
+        {
+            return rotateRight(root);
+        }
+        return root;
+    }
+
+    if (key > root->key) 
+    {
+        if (root->right == nullptr)
+            return root;
+
+        // Zag Zag
+        if (key > root->right->key) 
+        {
+            root->right->right = weightedSplay(root->right->right, key);
+            
+            if (root->right->right != nullptr && root->right->right->weight >= root->right->weight) 
+            {
+                root = rotateLeft(root);
+            }
+        }
+        // Zag Zig
+        else if (key < root->right->key) 
+        {
+            root->right->left = weightedSplay(root->right->left, key);
+            
+            if (root->right->left != nullptr && root->right->left->weight >= root->right->weight) 
+            {
+                root->right = rotateRight(root->right);
+            }
+        }
+        
+        if (root->right != nullptr && root->right->weight >= root->weight) 
+        {
+            return rotateLeft(root);
+        }
+        return root;
+    }
+
+    return root;
+}
+
 void SplayTree::insert(int key) {
     root = insertNode(root, key);
 }
-
 
 void SplayTree::remove(int key) {
     root = deleteNode(root, key);
 }
 
-
 bool SplayTree::search(int key) {
     root = searchNode(root, key);
     return (root && root->key == key);
 }
-
 
 void SplayTree::printTree(Node* root, int space) {
     const int COUNT = 10; 

@@ -8,10 +8,12 @@ class SplayTree {
     private:
         struct Node {
             int key;
+            int weight = 0;
             Node* left;
             Node* right;
             Node(int k) {
                 key = k;
+                weight = 1;
                 left = nullptr;
                 right = nullptr; 
             }
@@ -26,6 +28,7 @@ class SplayTree {
         Node* deleteNode(Node* root, int key);
         Node* searchNode(Node* root, int key);
         Node* semiSplay(Node* root, int key, int limit);
+        Node* weightedSplay(Node* root, int key);
         void printTree(Node* root, int space);
 
     public:
