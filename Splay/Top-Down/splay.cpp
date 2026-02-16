@@ -330,7 +330,7 @@ void SplayTree::remove(int key) {
 
 bool SplayTree::search(int key) {
     if (root == nullptr)
-        throw MyException("Cannot search in empty tree");
+        return false;
         
     root = searchNode(root, key);
     return (root && root->key == key);

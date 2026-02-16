@@ -10,7 +10,6 @@ using namespace chrono;
 vector<int> readFile(string filename) {
     vector<int> nums;
     ifstream file(filename);
-
     int n;
     while (file >> n) {
         nums.push_back(n);
@@ -47,7 +46,7 @@ int main() {
     tree2.resetNumbers();
     start = high_resolution_clock::now();
     for (int num : seq) {
-        tree2.benchmarkSemiSearch(num, 3);
+        tree2.benchmarkSemiSearch(num, 5);
         if (!tree2.search(num)) {
             tree2.insert(num);
         }
@@ -93,7 +92,7 @@ int main() {
     tree5.resetNumbers();
     start = high_resolution_clock::now();
     for (int num : uni) {
-        tree5.benchmarkSemiSearch(num, 3);
+        tree5.benchmarkSemiSearch(num, 5);
         if (!tree5.search(num)) {
             tree5.insert(num);
         }
@@ -139,7 +138,7 @@ int main() {
     tree8.resetNumbers();
     start = high_resolution_clock::now();
     for (int num : skew) {
-        tree8.benchmarkSemiSearch(num, 3);
+        tree8.benchmarkSemiSearch(num, 5);
         if (!tree8.search(num)) {
             tree8.insert(num);
         }
@@ -185,7 +184,7 @@ int main() {
     tree11.resetNumbers();
     start = high_resolution_clock::now();
     for (int num : work) {
-        tree11.benchmarkSemiSearch(num, 3);
+        tree11.benchmarkSemiSearch(num, 5);
         if (!tree11.search(num)) {
             tree11.insert(num);
         }

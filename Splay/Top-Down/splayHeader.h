@@ -48,9 +48,9 @@ class SplayTree {
         void displayNumbers();
         int findRotations();
         int findDepth();
-        void benchmarkSearch(int key);  // For regular splay
-        void benchmarkSemiSearch(int key, int limit);  // For semi-splay
-        void benchmarkWeightedSearch(int key);  // For weighted splay
+        void benchmarkSearch(int key);
+        void benchmarkSemiSearch(int key, int limit);
+        void benchmarkWeightedSearch(int key);
         void resetNumbers();
 };
 
