@@ -1,0 +1,2 @@
+This is the folder with all of my Splay tree programs in it. One folder has the topdown approach while the other have a bottom-up approach
+Additionally there is the semisplay and the weighted splay in the top-down folder.
