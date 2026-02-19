@@ -46,6 +46,16 @@ void BST::createVine()
 
     while (parent != nullptr)
     {
+        if (root->right != nullptr)
+        {
+            int nodes = numNodes(root->right);
+
+            if (nodes >= 2)
+            {
+                rotateLeft(root);
+            }
+        }
+
         if (child != nullptr)
         {
             rotateRight(parent);
@@ -207,4 +217,14 @@ void BST::display()
     cout << endl;
     printTree(root, 0);
     cout << endl;
+}
+
+int BST::numNodes(Node* root)
+{
+        if (root == NULL)
+                return 0;
+        if (root->left == NULL && root->right == NULL)
+                return 1;
+
+        return 1 + numNodes(root->left) + numNodes(root->right);
 }
