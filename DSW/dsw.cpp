@@ -50,10 +50,11 @@ void BST::createVine()
         {
             int nodes = numNodes(root->right);
 
-            if (nodes >= 2)
+            if (nodes > 2)
             {
                 rotateLeft(root);
             }
+
         }
 
         if (child != nullptr)
