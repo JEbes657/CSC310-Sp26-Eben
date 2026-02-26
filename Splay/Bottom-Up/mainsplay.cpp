@@ -30,24 +30,28 @@ void getData(const string& fileText)
 
     tree1.displayNumbers();
 
-    cout << "Time: " << duration << endl;
+    cout << "Time: " << duration << endl << endl;
 
     file.close();
 }
 
 int main() {
 
-    cout << "Bottom-Up" << endl << endl;
+    cout << "Bottom-Up" << endl;
 
+    cout << "sequential" << endl;
     string file = "../accessPattern/sequential.txt";
     getData(file);
 
+    cout << "uniform random" << endl;
     file = "../accessPattern/uniform_random.txt";
     getData(file);
 
+    cout << "skewed" << endl;
     file = "../accessPattern/zipf_skewed.txt";
     getData(file);
 
+    cout << "working set" << endl;
     file = "../accessPattern/working_set.txt";
     getData(file);
 }
