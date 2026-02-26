@@ -2,18 +2,6 @@
 
 // this is the bottom up implimentation of the splay tree
 
-MyException::MyException(void){
-    this->errString = "No Error Set";
-}
-
-MyException::MyException(const string &err){
-    this->errString = err;
-}
-
-MyException::MyException(const char *err){
-    this->errString = err;
-}
-
 SplayTree::SplayTree() 
 {
     root = nullptr;
@@ -138,7 +126,7 @@ void SplayTree::insertNode(int key) {
     {
         parent = curr;
         if (key == curr->key)
-            throw MyException("Duplicate Key");
+            return;
         if (key < curr->key)
             curr = curr->left;
         else
@@ -234,7 +222,7 @@ SplayTree::Node* SplayTree::searchNode(int key) {
     
     Node* curr = root;
     Node* lastNode = root;
-    
+
     while (curr != nullptr) 
     {
         lastNode = curr;
@@ -325,17 +313,19 @@ int SplayTree::findDepth(Node* root, int key, int depth) {
 
 void SplayTree::benchmarkSearch(int key) {
     int depth = findDepth(root, key, 0);
+
     if (depth >= 0)
     {
         totaldepth += depth;
         searchCount++;
     }
+    
     Node* result = searchNode(key);
 }
 
 void SplayTree::displayNumbers() {
     cout << "Rotations: " << rotations << endl;
-    cout << "Searches: " << searchCount << endl;
+    cout << "search Count" << searchCount << endl;
     if (searchCount > 0)
     {
         cout << "Search Depth: " << (double)totaldepth / searchCount << endl;
@@ -347,6 +337,8 @@ int SplayTree::findRotations() {
 }
 
 int SplayTree::findDepth() {
-    if (searchCount == 0) return 0;
+    if (searchCount == 0) 
+        return 0;
+
     return totaldepth / searchCount;
 }

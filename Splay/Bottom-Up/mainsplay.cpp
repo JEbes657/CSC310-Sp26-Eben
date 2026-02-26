@@ -1,116 +1,53 @@
 #include "splayHeader.h"
-#include <chrono>
-#include <vector>
 #include <fstream>
 #include <iostream>
+#include <string>
+#include <chrono>
 
 using namespace std;
-using namespace chrono;
 
-vector<int> readFile(string filename) {
-    vector<int> nums;
-    ifstream file(filename);
-    int n;
-    while (file >> n) {
-        nums.push_back(n);
+void getData(const string& fileText)
+{
+    ifstream file(fileText);
+
+    int num = 0;
+    SplayTree tree1;
+
+    auto start = chrono::steady_clock::now();
+
+    while (file >> num)
+    {
+        tree1.benchmarkSearch(num);
+
+        if (!tree1.search(num))
+        {
+            tree1.insert(num);
+        }
     }
+
+    auto end = chrono::steady_clock::now();
+    auto duration = chrono::duration_cast<chrono::microseconds>(end - start).count();
+
+    tree1.displayNumbers();
+
+    cout << "Time: " << duration << endl;
+
     file.close();
-    return nums;
 }
 
 int main() {
-    // Read the files
-    vector<int> seq = readFile("../accessPattern/sequential.txt");
-    vector<int> uni = readFile("../accessPattern/uniform_random.txt");
-    vector<int> skew = readFile("../accessPattern/zipf_skewed.txt");
-    vector<int> work = readFile("../accessPattern/working_set.txt");
-    
-    // Test sequential pattern
-    cout << "Sequential Pattern:" << endl;
-    
-    SplayTree tree1;
-    tree1.resetNumbers();
-    auto start = high_resolution_clock::now();
-    for (int num : seq) {
-        tree1.benchmarkSearch(num);
-        if (!tree1.search(num)) {
-            try {
-                tree1.insert(num);
-            } catch (MyException& e) {
-                // Duplicate, skip
-            }
-        }
-    }
-    auto end = high_resolution_clock::now();
-    cout << "Bottom-Up Splay:" << endl;
-    tree1.displayNumbers();
-    cout << "Time: " << duration_cast<microseconds>(end - start).count() << " microseconds\n" << endl;
-    
-    
-    // Test uniform pattern
-    cout << "Uniform Pattern:" << endl;
-    
-    SplayTree tree2;
-    tree2.resetNumbers();
-    start = high_resolution_clock::now();
-    for (int num : uni) {
-        tree2.benchmarkSearch(num);
-        if (!tree2.search(num)) {
-            try {
-                tree2.insert(num);
-            } catch (MyException& e) {
-                // Duplicate, skip
-            }
-        }
-    }
-    end = high_resolution_clock::now();
-    cout << "Bottom-Up Splay:" << endl;
-    tree2.displayNumbers();
-    cout << "Time: " << duration_cast<microseconds>(end - start).count() << " microseconds\n" << endl;
-    
-    
-    // Test skewed pattern
-    cout << "Skewed Pattern:" << endl;
-    
-    SplayTree tree3;
-    tree3.resetNumbers();
-    start = high_resolution_clock::now();
-    for (int num : skew) {
-        tree3.benchmarkSearch(num);
-        if (!tree3.search(num)) {
-            try {
-                tree3.insert(num);
-            } catch (MyException& e) {
-                // Duplicate, skip
-            }
-        }
-    }
-    end = high_resolution_clock::now();
-    cout << "Bottom-Up Splay:" << endl;
-    tree3.displayNumbers();
-    cout << "Time: " << duration_cast<microseconds>(end - start).count() << " microseconds\n" << endl;
-    
-    
-    // Test working set pattern
-    cout << "Working Set Pattern:" << endl;
-    
-    SplayTree tree4;
-    tree4.resetNumbers();
-    start = high_resolution_clock::now();
-    for (int num : work) {
-        tree4.benchmarkSearch(num);
-        if (!tree4.search(num)) {
-            try {
-                tree4.insert(num);
-            } catch (MyException& e) {
-                // Duplicate, skip
-            }
-        }
-    }
-    end = high_resolution_clock::now();
-    cout << "Bottom-Up Splay:" << endl;
-    tree4.displayNumbers();
-    cout << "Time: " << duration_cast<microseconds>(end - start).count() << " microseconds\n" << endl;
-    
-    return 0;
+
+    cout << "Bottom-Up" << endl << endl;
+
+    string file = "../accessPattern/sequential.txt";
+    getData(file);
+
+    file = "../accessPattern/uniform_random.txt";
+    getData(file);
+
+    file = "../accessPattern/zipf_skewed.txt";
+    getData(file);
+
+    file = "../accessPattern/working_set.txt";
+    getData(file);
 }
