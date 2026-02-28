@@ -33,6 +33,7 @@ class BST
         void performRotation(int count);  // helper for phase 2 (rebuildTree)
         void printTree(Node* root, int space);
         int numNodes(Node* root);
+        int findHeight(Node* root);
 
     public:
         BST();

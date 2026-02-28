@@ -81,20 +81,27 @@ void BST::createVine()
 
 void BST::rebuildTree(int size)
 {
+    if (size <= 1)
+        return;
     // how many left rotations do we need
 
-    int h = (int)log2(size + 1);
+    int h = (int)log2(size);
     int m = (1 << h) - 1; // number of node in perfect subtree
 
     int extra = size - m; // extra nodes
 
-    //Initial rotations = extra node at the last not-full level
-    performRotation(extra);
+    if (extra > 0)
+        performRotation(extra);
 
     // Subsequent rotations
-    for (size = m / 2; size > 0; size /= 2)
+    for (int rotations = m / 2; rotations > 0; rotations /= 2)
     {
-        performRotation(size);
+        performRotation(rotations);
+
+        int height = findHeight(root);
+
+        if (height <= 2 * h)
+            break;
     }
 }
 
@@ -104,26 +111,27 @@ void BST::performRotation(int count)
     Node* grandparent = nullptr;
     Node* parent = root;
 
-    for(int i = 0; i < count && parent != nullptr && parent->right != nullptr; i++)
+    for(int i = 0; i < count && parent != nullptr && parent->left != nullptr; i++)
     {
-        if (i % 2 == 1) // odd position
+        if (i % 2 == 1)
         {
             if (grandparent == nullptr)
             {
-                rotateLeft(root);
+                rotateRight(root);
                 parent = root;
             }
             else
             {
-                rotateLeft(grandparent->right);
-                parent = grandparent->right;
+                rotateRight(grandparent->right);
+                parent = grandparent->left;
             }
         }
-
-        grandparent = parent;
-        parent = parent->right;
     }
+
+    grandparent = parent;
+    parent = parent->left;
 }
+
 
 void BST::printTree(Node* root, int space) {
     const int COUNT = 10; 
@@ -208,12 +216,28 @@ void BST::dswBalance()
     display();
 
     int size = 0;
-    Node* temp = root;
+
+    size = numNodes(root);
+
+    rebuildTree(size);
+    
+    /*Node* temp = root;
     while(temp != nullptr)
     {
         size++;
         temp = temp->right;
-    }
+    }*/
+}
+
+int BST::findHeight(Node* root)
+{
+    if (root == nullptr)
+        return -1; // height of an empty tree is -1
+
+    int leftHeight = findHeight(root->left);
+    int rightHeight = findHeight(root->right);
+
+    return 1 + max(leftHeight, rightHeight);
 }
 
 void BST::display()
