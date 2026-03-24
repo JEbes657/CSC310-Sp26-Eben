@@ -126,10 +126,6 @@ void RBTREE::insertR(Node*& root, Node*& node)
     }
 }
 
-bool RBTREE::isRed(Node* node) {
-    return node != TNULL && node->color == RED;
-}
-
 void RBTREE::LLinsertFix(Node* k)
 {
     while (k != root && k->parent != nullptr)

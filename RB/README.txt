@@ -1,0 +1,1 @@
+This folder contains the full implementation of RB trees and their counterpart Left Leaning Red Black trees. Attached to this folder will also be a picture with the output in linux as well as a PDF containing the answers to questions 2 and 3 for the A3 Assignment.
