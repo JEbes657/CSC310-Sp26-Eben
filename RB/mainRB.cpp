@@ -24,26 +24,26 @@ int main() {
         rb.printTree();
         
         cout << "Removing 20:" << endl;
-        rb.remove(20);
+        //rb.remove(20);
         rb.printTree();
 
-        // rb.insert(7);
-        // rb.insert(11);
-        // rb.insert(23);
-        // rb.insert(33);
-        // rb.insert(20);
-        // rb.insert(22);
-        // rb.insert(2);
-        // rb.insert(5);
-        // rb.insert(30);
-        // rb.insert(27);
-        // rb.insert(25);
-        // rb.printTree();
-        // rb.remove(2);
-        // rb.remove(11);
-        // rb.remove(23);
-        // cout << "-------------------------------------" << endl;
-        // rb.printTree();
+        rb.insert(7);
+        rb.insert(11);
+        rb.insert(23);
+        rb.insert(33);
+        rb.insert(20);
+        rb.insert(22);
+        rb.insert(2);
+        rb.insert(5);
+        rb.insert(30);
+        rb.insert(27);
+        rb.insert(25);
+        rb.printTree();
+        //rb.remove(2);
+        //rb.remove(11);
+        //rb.remove(23);
+        cout << "-------------------------------------" << endl;
+        rb.printTree();
     
     return 0;
 }

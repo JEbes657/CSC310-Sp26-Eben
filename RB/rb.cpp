@@ -4,8 +4,12 @@
 
 RBTREE::RBTREE()
 {
+    TNULL = new Node(0);
+    TNULL->color = BLACK;
+    TNULL->left = TNULL;
+    TNULL->right = TNULL;
 
-
+    root = TNULL;
 }
 
 RBTREE::~RBTREE()
@@ -15,7 +19,21 @@ RBTREE::~RBTREE()
 
 void RBTREE::insert(int key)
 {
+    Node* node = nullptr;
+    node = new Node(key);
 
+    node->right = TNULL;
+    node->left = TNULL;
+
+    if (root == TNULL)
+    {
+        root = node;
+        root->color = BLACK;
+        return;
+    }
+
+    insertR(root, node);
+    LLinsertFix(node);
 }
 
 void RBTREE::remove(int key)
@@ -108,10 +126,99 @@ void RBTREE::insertR(Node*& root, Node*& node)
     }
 }
 
-void RBTREE::insertFix(Node* k)
-{
-
+bool RBTREE::isRed(Node* node) {
+    return node != TNULL && node->color == RED;
 }
+
+void RBTREE::LLinsertFix(Node* k)
+{
+    while (k != root && k->parent != nullptr)
+    {
+        k = k->parent;
+
+        if (k->right->color == RED && k->left->color != RED)
+        {
+            leftRotate(k);
+            k = k->parent;
+        }
+
+        if (k->left->color == RED && k->left != TNULL && k->left->left->color == RED)
+        {
+            rightRotate(k);
+            k = k->parent;
+        }
+
+        if (k->left->color == RED && k->right->color == RED)
+        {
+            k->color = RED;
+            k->left->color = BLACK;
+            k->right->color = BLACK;
+        }
+    }
+    root->color = BLACK;
+}
+
+/*void RBTREE::insertFix(Node* k)
+{
+    Node* uncle;
+
+    while(k != root && k->parent->color == RED)
+    {
+        if (k->parent = k->parent->parent->right)
+        {
+            uncle = k->parent->parent->left;
+
+            if (uncle->color == RED)
+            {
+                uncle->color = BLACK;
+                k->parent->color = BLACK;
+                k->parent->parent->color = RED;
+
+                k = k->parent->parent;
+            }
+            else
+            {
+                if (k == k->parent->left)
+                {
+                    k = k->parent;
+                    rightRotate(k);
+                }
+
+                k->parent->color = BLACK;
+                k->parent->parent->color = RED;
+                leftRotate(k->parent->parent);
+            }
+        }
+
+        if (k->parent = k->parent->parent->left)
+        {
+            uncle = k->parent->parent->right;
+
+            if (uncle->color == RED)
+            {
+                uncle->color = BLACK;
+                k->parent->color = BLACK;
+                k->parent->parent->color = RED;
+
+                k = k->parent->parent;
+            }
+            else
+            {
+                if (k == k->parent->right)
+                {
+                    k = k->parent;
+                    leftRotate(k);
+                }
+
+                k->parent->color = BLACK;
+                k->parent->parent->color = RED;
+                rightRotate(k->parent->parent);
+            }
+        }
+    }
+
+    root->color = BLACK;
+}*/
 
 
 void RBTREE::removeR(Node*& node, int key)
@@ -149,7 +256,7 @@ void RBTREE::removeR(Node*& node, int key)
         {
             y = successor(node->right);
             y_original_color = x->color;
-            x = y->right; // replacement for successor
+            x = y->right;
 
             if (y->parent != node)
             {
@@ -193,7 +300,7 @@ void RBTREE::deleteFix(Node* x) {
                 sibling = x->parent->right;
             }
             
-            if (sibling->left->color == BLACK && sibling->right == BLACK) // CASE 2
+            if (sibling->left->color == BLACK && sibling->right->color == BLACK) // CASE 2
             {
                 sibling->color = RED;
                 x = x->parent;
@@ -228,7 +335,7 @@ void RBTREE::deleteFix(Node* x) {
                 sibling = x->parent->right;
             }
             
-            if (sibling->left->color == BLACK && sibling->right == BLACK) // CASE 2
+            if (sibling->left->color == BLACK && sibling->right->color == BLACK) // CASE 2
             {
                 sibling->color = RED;
                 x = x->parent;

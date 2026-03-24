@@ -3,7 +3,7 @@
 int main()
 {
     BST bst;
-
+/*
     bst.insert(10);
     bst.insert(14);
     bst.insert(23);
@@ -23,6 +23,19 @@ int main()
     bst.insert(43);
     bst.insert(40);
     cout << "Orginal BST:";
+    bst.display();
+*/
+
+    bst.insert(19);
+    bst.insert(3);
+    bst.insert(2);
+    bst.insert(27);
+    bst.insert(36);
+    bst.insert(20);
+    bst.insert(30);
+    bst.insert(59);
+    bst.insert(43);
+    bst.insert(40);
     bst.display();
 
     bst.dswBalance();

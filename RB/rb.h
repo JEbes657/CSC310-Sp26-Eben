@@ -18,6 +18,7 @@ struct Node
     int data;
     Node* left;
     Node* right;
+    Color color;
     Node* parent;
 
     Node(int key)
@@ -25,6 +26,9 @@ struct Node
         data = key;
         left = nullptr;
         right = nullptr;
+        parent = nullptr;
+        color = RED;
+
     }
 };
 
@@ -32,12 +36,14 @@ class RBTREE
 {
     private:
         Node* root;
+        Node* TNULL;
 
         void leftRotate(Node* y);
         void rightRotate(Node* y);
 
         void insertR(Node*& root, Node*& node);
         void insertFix(Node* k);
+        void LLinsertFix(Node* k);
         
         void removeR(Node*& node, int key);
         void deleteFix(Node* x);
@@ -46,6 +52,8 @@ class RBTREE
 
         void deleteSubtree(Node* node);
         void print(Node* root, int space);
+
+        bool isRed(Node* node);
 
     public:
         RBTREE();
