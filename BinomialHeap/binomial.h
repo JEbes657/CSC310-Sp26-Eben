@@ -11,7 +11,7 @@ struct binomialNode
     int key;
     int degree;
     binomialNode* sibling;
-    binomialNode* child;
+    binomialNode* child; //leftmost child
     binomialNode* parent;
 
     binomialNode(int k);
