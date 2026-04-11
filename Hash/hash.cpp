@@ -71,17 +71,52 @@ void HashTable::insert(const string& key, int value) {
             break;
 
         case CHAINING_LIST:
-            // complete this
+            for (auto& pair : tableList[index]) 
+            {
+                if (pair.first == key)
+                {
+                    pair.second = value;
+                    return;
+                }
+            }
+            tableList[index].push_back({key, value});
             break;
 
         case CHAINING_BST:
-            // complete this - use AVL insert method
+        {
+            int current;
+            bool inTable = tableBST[index].search(key, current);
+
+            tableBST[index].insert(key, value);
+
+            if (inTable)
+                return;
+
             break;
+        }
 
         case LINEAR_PROBING:
         case QUADRATIC_PROBING:
         case DOUBLE_HASHING:
-            // complete this
+        {
+            for (int k = 0; k < tableSize; k++)
+            {
+                int probeNum = probe(index, k , key);
+
+                if (tableProbing[probeNum].first.empty())
+                {
+                    tableProbing[probeNum] = {key, value};
+                    elementCount++;
+                }
+
+                if (tableProbing[probeNum].first == key)
+                {
+                    tableProbing[probeNum].second = value;
+                    return;
+                }
+            }
+            return;
+        }
     }
     elementCount++;
 }
@@ -197,7 +232,7 @@ void HashTable::displayStats() {
 
 
 void HashTable::rehash() {
-    
+    // complete this
 }
 
 
