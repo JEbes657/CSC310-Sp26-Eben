@@ -42,19 +42,19 @@ int HashTable::hash2(const string& key) const {
     return 1 + (hash % (tableSize - 1));
 }
 
-// complete this
-int HashTable::probe(int index, int i) const {
+int HashTable::probe(int index, int i, const string& key) const {
     switch (method) {
         case LINEAR_PROBING:
-            // complete this
+            return (index + i) % tableSize;
         case QUADRATIC_PROBING:
-            // complete this
+            return (index + i * i) % tableSize;
         case DOUBLE_HASHING:
-            // complete this
+            return (index + i * hash2(key)) % tableSize;
         default:
             return index;
     }
 }
+
 void HashTable::insert(const string& key, int value) {
     resizeIfNeeded();
     int index = hash1(key);
@@ -91,7 +91,6 @@ bool HashTable::search(const string& key, int& value) {
 }
 
 bool HashTable::remove(const string& key) {
-    // complete this
 }
 
 // Function to read data from file
@@ -198,7 +197,7 @@ void HashTable::displayStats() {
 
 
 void HashTable::rehash() {
-    // complete this
+    
 }
 
 
