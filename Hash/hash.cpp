@@ -6,7 +6,8 @@ HashTable::HashTable(int size, CollisionHandling variant)
     tableSize = size; 
     elementCount = 0; 
     method = variant;
-    switch (method) {
+    switch (method) 
+    {
         case CHAINING_VECTOR:
             tableVector.resize(size);
             break;
@@ -48,7 +49,7 @@ int HashTable::probe(int index, int i, const string& key) const {
             return (index + i) % tableSize;
         case QUADRATIC_PROBING:
             return (index + i * i) % tableSize;
-        case DOUBLE_HASHING:
+        case DOUBLE_HASHING: // modified the function to pass in the key as it is needed for double hashing
             return (index + i * hash2(key)) % tableSize;
         default:
             return index;
@@ -99,21 +100,36 @@ void HashTable::insert(const string& key, int value) {
         case QUADRATIC_PROBING:
         case DOUBLE_HASHING:
         {
+            int firstDeletedIndex = -1;
+
             for (int k = 0; k < tableSize; k++)
             {
                 int probeNum = probe(index, k , key);
 
-                if (tableProbing[probeNum].first.empty())
+                const string& currentKey = tableProbing[probeNum].first;
+
+                if (currentKey == "Deleted" && firstDeletedIndex == -1)
+                    firstDeletedIndex = probeNum;
+
+                if (currentKey.empty())
                 {
-                    tableProbing[probeNum] = {key, value};
+                    int target = (firstDeletedIndex != -1) ? firstDeletedIndex : probeNum;
+                    tableProbing[target] = {key, value};
                     elementCount++;
+                    return;
                 }
 
-                if (tableProbing[probeNum].first == key)
+                if (currentKey == key)
                 {
                     tableProbing[probeNum].second = value;
                     return;
                 }
+            }
+
+            if (firstDeletedIndex != -1)
+            {
+                tableProbing[firstDeletedIndex] = {key, value};
+                elementCount++;
             }
             return;
         }
@@ -122,10 +138,134 @@ void HashTable::insert(const string& key, int value) {
 }
 
 bool HashTable::search(const string& key, int& value) {
-    // complete this
+    int index = hash1(key);
+
+    switch (method)
+    {
+        case CHAINING_VECTOR:
+            for (const auto& pair : tableVector[index])
+            {
+                if (pair.first == key)
+                {
+                    value = pair.second;
+                    return true;
+                }
+            }
+            return false;
+
+        case CHAINING_LIST:
+            for (const auto& pair : tableList[index])
+            {
+                if (pair.first == key)
+                {
+                    value = pair.second;
+                    return true;
+                }
+            }
+            return false;
+
+        case CHAINING_BST:
+            return tableBST[index].search(key, value);
+
+        case LINEAR_PROBING:
+        case QUADRATIC_PROBING:
+        case DOUBLE_HASHING:
+        {
+            for (int k = 0; k < tableSize; k++)
+            {
+                int probeNum = probe(index, k, key);
+
+                const string& currentKey = tableProbing[probeNum].first;
+
+                if (currentKey.empty())
+                    return false;
+
+                if (currentKey == "Deleted")
+                    continue;
+                
+                if (currentKey == key)
+                {
+                    value = tableProbing[probeNum].second;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    return false;
 }
 
 bool HashTable::remove(const string& key) {
+    int index = hash1(key);
+
+    switch (method)
+    {
+        case CHAINING_VECTOR:
+        {
+            auto& bucket = tableVector[index];
+            for (auto counter = bucket.begin(); counter != bucket.end(); counter++)
+            {
+                if (counter->first == key)
+                {
+                    bucket.erase(counter);
+                    elementCount--;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        case CHAINING_LIST:
+        {
+            auto& bucket = tableList[index];
+
+            for (auto counter = bucket.begin(); counter != bucket.end(); counter++)
+            {
+                if (counter->first == key)
+                {
+                    bucket.erase(counter);
+                    elementCount--;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        case CHAINING_BST:
+        {
+            if (tableBST[index].remove(key))
+            {
+                elementCount--;
+                return true;
+            }
+            return false;
+        }
+
+        case LINEAR_PROBING:
+        case QUADRATIC_PROBING:
+        case DOUBLE_HASHING:
+        {
+            for (int k = 0; k < tableSize; k++)
+            {
+                int probeNum = probe(index, k, key);
+
+                const string& currentKey = tableProbing[probeNum].first;
+
+                if (currentKey.empty())
+                    return false;
+                if (currentKey == "Deleted")
+                    continue;
+                if (currentKey == key)
+                {
+                    tableProbing[probeNum] = {"Deleted", 0};
+                    elementCount--;
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+    return false;
 }
 
 // Function to read data from file
@@ -232,17 +372,117 @@ void HashTable::displayStats() {
 
 
 void HashTable::rehash() {
-    // complete this
+    int upgradeSize = tableSize * 2;
+    vector<vector<pair<string, int>>> upgradeVector;
+    vector<list<pair<string, int>>> upgradeList;
+    vector<AVLTree> upgradeBST;
+    vector<pair<string, int>> upgradeProbing;
+
+    switch (method)
+    {
+        case CHAINING_VECTOR:
+            upgradeVector.resize(upgradeSize);
+            break;
+        case CHAINING_LIST:
+            upgradeList.resize(upgradeSize);
+            break;
+        case CHAINING_BST:
+            upgradeBST.resize(upgradeSize);
+            break;
+        case LINEAR_PROBING:
+        case QUADRATIC_PROBING:
+        case DOUBLE_HASHING:
+            upgradeProbing.resize(upgradeSize);
+            break;
+    }
+
+    switch (method)
+    {
+        case CHAINING_VECTOR:
+            for (const auto& bucket : tableVector)
+            {
+                for (const auto& pair : bucket)
+                {
+                    int index = hash1(pair.first) % upgradeSize;
+                    upgradeVector[index].push_back(pair);
+                }
+            }
+            tableVector = move(upgradeVector);
+            break;
+
+        case CHAINING_LIST:
+            for (const auto& bucket : tableList)
+            {
+                for (const auto& pair : bucket)
+                {
+                    int index = hash1(pair.first) % upgradeSize;
+                    upgradeList[index].push_back(pair);
+                }
+            }
+            tableList = move(upgradeList);
+            break;
+
+        case CHAINING_BST:
+            for (const auto& bucket : tableBST)
+            {
+                vector<pair<string, int>> elements = bucket.inOrderTraversal();
+                for (const auto& pair : elements)
+                {
+                    int index = hash1(pair.first) % upgradeSize;
+                    upgradeBST[index].insert(pair.first, pair.second);
+                }
+            }
+            tableBST = move(upgradeBST);
+            break;
+
+        case LINEAR_PROBING:
+        case QUADRATIC_PROBING:
+        case DOUBLE_HASHING:
+            for (const auto& entry : tableProbing)
+            {
+                if (!entry.first.empty())
+                {
+                    int index = hash1(entry.first) % upgradeSize;
+                    for (int k = 0; k < upgradeSize; k++)
+                    {
+                        int probeNum = probe(index, k, entry.first);
+                        if (upgradeProbing[probeNum].first.empty())
+                        {
+                            upgradeProbing[probeNum] = entry;
+                            break;
+                        }
+                    }
+                }
+            }
+            tableProbing = move(upgradeProbing);
+            break;
+    }
+    tableSize = upgradeSize;
 }
 
 
 int HashTable::findEmptySlot(const string& key) {
-    // complete this
+    int index = hash1(key);
+
+    for (int k = 0; k < tableSize; k++)
+    {
+        int probeNum = probe(index, k, key);
+
+        if (tableProbing[probeNum].first.empty() || tableProbing[probeNum].first == key)
+        {
+            return probeNum;
+        }
+    }
+    return -1;
 }
 
 // try experimenting with different thresholds for each technique
 void HashTable::resizeIfNeeded() {
-    // complete this
+    double loadFactor = (double)elementCount / tableSize;
+    if (loadFactor > 0.75)
+    {
+        rehash();
+    }
 }
 
 // Benchmark function for built-in hash table in C++
