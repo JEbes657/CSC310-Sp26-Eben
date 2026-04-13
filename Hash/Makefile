@@ -1,4 +1,4 @@
-INCLUDE_DIRS := Includes
+INCLUDE_DIRS := AVL
 CC              := g++
 CFLAGS          := -I$(INCLUDE_DIRS)
 
@@ -10,16 +10,16 @@ DEPS          := hash.h AVL/avl.h
 all:hash
 
 clean:
-    rm $(OBJS) hash
+	rm $(OBJS) hash
 
 hash.o: hash.cpp ${DEPS}
-    $(CC) -c -o $@ $(CFLAGS) $<
+	$(CC) -c -o $@ $(CFLAGS) $<
 
 main.o: mainHash.cpp ${DEPS}
-    $(CC) -c -o $@ $(CFLAGS) $<
+	$(CC) -c -o $@ $(CFLAGS) $<
 
 avl.o: AVL/avl.cpp AVL/avl.h
-    $(CC) -c -o $@ $(CFLAGS) $<
+	$(CC) -c -o $@ $(CFLAGS) $<
 
 hash: $(OBJS)
-    $(CC) -o $@ $^ $(CFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS)
