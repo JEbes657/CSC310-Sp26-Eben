@@ -3,6 +3,8 @@
 int main() {
     srand(time(nullptr));
 
+    int tableSize = 50021;
+
     vector<string> dataFiles = {"data/no_collision_data.txt", "data/low_collision_data.txt", "data/high_collision_data.txt"};
     CollisionHandling methods[] = {CHAINING_VECTOR, CHAINING_LIST, CHAINING_BST, LINEAR_PROBING, QUADRATIC_PROBING, DOUBLE_HASHING};
 
@@ -13,7 +15,7 @@ int main() {
 
         auto data = readDataFromFile(file);
         int numSearch = data.size() / 2;
-        int numDelete = 0;
+        int numDelete = data.size() / 4;
 
         for (auto method : methods) {
             cout << "\n----------------------------------------" << endl;
