@@ -33,9 +33,9 @@ class BinomialHeap
         void merge(BinomialHeap& other);
         int findMin();
 
-        //deleteMin()
-        //decreaseKey(oldKey, newKey);
-        //deleteKey(int key);
+        void deleteMin();
+        void decreaseKey(int oldKey, int newKey);
+        void deleteKey(int key);
 
         void printHeap();
         void printTree(binomialNode* node, int space);

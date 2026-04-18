@@ -175,3 +175,96 @@ void BinomialHeap::printTree(binomialNode* node, int space)
         child = child->sibling;
     }
 }
+
+void BinomialHeap::deleteMin() {
+    if (!head)
+        return;
+
+    binomialNode* minNode = head;
+    binomialNode* prevMin = nullptr;
+    binomialNode* cur = head->sibling;
+
+    while (cur->sibling) 
+    {
+        if (cur->key < minNode->key) 
+        {
+            minNode = cur->sibling;
+            prevMin = cur;
+        }
+        cur = cur->sibling;
+    }
+
+    if (prevMin)
+        prevMin->sibling = minNode->sibling;
+    else 
+        head = minNode->sibling;
+
+    binomialNode* child = minNode->child;
+    binomialNode* newHead = nullptr;
+
+    while (child != nullptr)
+    {
+        binomialNode* nextChild = child->sibling;
+        child->sibling = newHead;
+        child->parent = nullptr;
+
+        newHead = child;
+        child = nextChild;
+    }
+
+    head = unionHeap(head, newHead);
+
+    if (!head || !head->sibling)
+    {
+        delete minNode;
+        return;
+    }
+
+    binomialNode* prev = nullptr;
+    cur = head;
+    binomialNode* next = head->sibling;
+
+    while (next != nullptr)
+    {
+        linkTrees(prev, cur, next);
+        next = cur->sibling;
+    }
+
+    delete minNode;
+}
+
+void BinomialHeap::decreaseKey(int oldKey, int newKey) {
+    if (newKey > oldKey)
+        return;
+
+    binomialNode* findNode = nullptr;
+    binomialNode* cur = head;
+
+    while (cur) 
+    {
+        if (cur->key == oldKey) 
+        {
+            findNode = cur;
+            break;
+        }
+        cur = cur->sibling;
+    }
+
+    if (!findNode)
+        return;
+
+    findNode->key = newKey;
+    binomialNode* parent = findNode->parent;
+
+    while (parent && findNode->key < parent->key) 
+    {
+        swap(findNode->key, parent->key);
+        findNode = parent;
+        parent = parent->parent;
+    }
+}
+
+void BinomialHeap::deleteKey(int key) {
+    decreaseKey(key, INT_MIN);
+    deleteMin();
+}
