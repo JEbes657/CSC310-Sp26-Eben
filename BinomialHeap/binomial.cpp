@@ -69,7 +69,6 @@ void BinomialHeap::linkTrees(binomialNode*& prev, binomialNode*& cur, binomialNo
         {
             cur->sibling = next->sibling;
             mergeTrees(cur, next);
-            next = cur->sibling;
         }
         else
         {
@@ -146,6 +145,8 @@ int BinomialHeap::findMin() // log n operation but it can O(1) with a min pointe
         }
         temp = temp->sibling;
     }
+
+    return minKey;
 }
 
 void BinomialHeap::printHeap() {
