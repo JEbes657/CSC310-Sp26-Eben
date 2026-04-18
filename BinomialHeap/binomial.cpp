@@ -183,14 +183,14 @@ void BinomialHeap::deleteMin() {
     binomialNode* minNode = head;
     binomialNode* prevMin = nullptr;
     binomialNode* cur = head->sibling;
-    binomialNode* prev = head;          // Fix 3: track prev as we walk
+    binomialNode* prev = head;
 
-    while (cur)                         // Fix 1: was cur->sibling, crashes on single root
+    while (cur)
     {
         if (cur->key < minNode->key) 
         {
             minNode = cur;
-            prevMin = prev;             // Fix 2: was cur, needs to be the node before cur
+            prevMin = prev;
         }
         prev = cur;
         cur = cur->sibling;
