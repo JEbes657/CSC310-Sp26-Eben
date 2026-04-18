@@ -12,10 +12,10 @@ all: binomial.o main.o Binomial
 clean:
 	rm $(OBJS) Binomial
 
-binomial.o: rb.cpp ${DEPS}
+binomial.o: binomial.cpp ${DEPS}
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-main.o: mainRB.cpp ${DEPS}
+main.o: main.cpp ${DEPS}
 	$(CC) -c -o $@ $(CFLAGS) $<
 
 Binomial: $(OBJS)
