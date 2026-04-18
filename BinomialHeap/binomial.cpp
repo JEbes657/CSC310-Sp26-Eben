@@ -183,14 +183,16 @@ void BinomialHeap::deleteMin() {
     binomialNode* minNode = head;
     binomialNode* prevMin = nullptr;
     binomialNode* cur = head->sibling;
+    binomialNode* prev = head;          // Fix 3: track prev as we walk
 
-    while (cur->sibling) 
+    while (cur)                         // Fix 1: was cur->sibling, crashes on single root
     {
         if (cur->key < minNode->key) 
         {
-            minNode = cur->sibling;
-            prevMin = cur;
+            minNode = cur;
+            prevMin = prev;             // Fix 2: was cur, needs to be the node before cur
         }
+        prev = cur;
         cur = cur->sibling;
     }
 
@@ -220,13 +222,13 @@ void BinomialHeap::deleteMin() {
         return;
     }
 
-    binomialNode* prev = nullptr;
+    binomialNode* prevNode = nullptr;
     cur = head;
     binomialNode* next = head->sibling;
 
     while (next != nullptr)
     {
-        linkTrees(prev, cur, next);
+        linkTrees(prevNode, cur, next);
         next = cur->sibling;
     }
 
@@ -237,30 +239,23 @@ void BinomialHeap::decreaseKey(int oldKey, int newKey) {
     if (newKey > oldKey)
         return;
 
-    binomialNode* findNode = nullptr;
-    binomialNode* cur = head;
-
-    while (cur) 
+    binomialNode* node = head;
+    while (node) 
     {
-        if (cur->key == oldKey) 
+        if (node->key == oldKey) 
         {
-            findNode = cur;
-            break;
+            node->key = newKey;
+            binomialNode* parent = node->parent;
+
+            while (parent && node->key < parent->key) 
+            {
+                swap(node->key, parent->key);
+                node = parent;
+                parent = node->parent;
+            }
+            return;
         }
-        cur = cur->sibling;
-    }
-
-    if (!findNode)
-        return;
-
-    findNode->key = newKey;
-    binomialNode* parent = findNode->parent;
-
-    while (parent && findNode->key < parent->key) 
-    {
-        swap(findNode->key, parent->key);
-        findNode = parent;
-        parent = parent->parent;
+        node = node->sibling;
     }
 }
 

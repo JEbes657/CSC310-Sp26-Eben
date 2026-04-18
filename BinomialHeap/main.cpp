@@ -17,5 +17,20 @@ int main() {
     bh.printHeap();
     
     cout << endl << "Minimum key: " << bh.findMin() << endl;
+
+    cout << "\nDeleting minimum element..." << endl;
+    bh.deleteMin();
+    bh.printHeap();
+    cout << endl << "Minimum key after deleteMin: " << bh.findMin() << endl;
+
+    cout << "\nDecreasing key 14 to 2..." << endl;
+    bh.decreaseKey(14, 2);
+    bh.printHeap();
+    cout << endl << "Minimum key after decreaseKey: " << bh.findMin() << endl;
+
+    cout << "\nDeleting minimum element again..." << endl;
+    bh.deleteMin();
+    bh.printHeap();
+    cout << endl << "Minimum key after second deleteMin: " << bh.findMin() << endl;
     return 0;
 }
