@@ -2,24 +2,24 @@ INCLUDE_DIRS := geneRecords
 CC              := g++
 CFLAGS          := -I$(INCLUDE_DIRS)
 
-OBJS          := hash.o main.o avl.o
-DEPS          := hash.h AVL/avl.h
+OBJS          := geneBank.o mainSamples.o customErrorClass.o
+DEPS          := geneBank.h customErrorClass.h
 
 .PHONY: clean all
 
-all:hash
+all: geneRecords
 
 clean:
-	rm $(OBJS) hash
+	rm $(OBJS) geneRecords
 
-hash.o: hash.cpp ${DEPS}
+geneBank.o: geneBank.cpp ${DEPS}
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-main.o: mainHash.cpp ${DEPS}
+mainSamples.o: mainSamples.cpp ${DEPS}
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-avl.o: AVL/avl.cpp AVL/avl.h
+customErrorClass.o: customErrorClass.cpp ${DEPS}
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-hash: $(OBJS)
+geneRecords: $(OBJS)
 	$(CC) -o $@ $^ $(CFLAGS)
