@@ -29,11 +29,6 @@ void GENE_BANK::sort(Sample array[], int fileSize)
     for (int i = 0; i < 5; i++)
         pos[i] = startPos[i];
 
-    Sample* sorted = new Sample[fileSize];
-    int pos[5];
-    for (int i = 0; i < 5; i++)
-        pos[i] = startPos[i];
-
     for (int i = 0; i < fileSize; i++)
     {
         int sc = array[i].speciesCode;
