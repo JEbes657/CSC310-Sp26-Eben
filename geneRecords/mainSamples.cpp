@@ -29,24 +29,31 @@ int main(int argc, char *argv[])
         exit(0);
     }
 
-    
     inputBinary.open(argv[1], ios::in|ios::binary);
     //get the file size here COMPLETE THIS .......
+    if (!inputBinary.is_open())
+    {
+        cout << "ERROR" << endl;
+        exit(1);
+    } 
 
+    inputBinary.seekg(0, ios::end);
+    fileSize = inputBinary.tellg() / entryByte;
+    inputBinary.seekg(0, ios::beg);
 
     smpl = new Sample[fileSize];
-
-    //Reading a binary file into a struct array here COMPLETE THIS ....
-
-
+    inputBinary.read((char*)smpl, fileSize * entryByte);
     inputBinary.close();
 
-
     //Sorting the struct array
-    mySample.sort(smpl, fileSize-1);
+    mySample.sort(smpl, fileSize);
 
     //Writing sorted file to a new binary file here COMPLETE THIS
+    sortedBinary.open(fileStr, ios::out | ios::binary);
+    sortedBinary.write((char*)smpl, fileSize * sizeof(Sample));
+    sortedBinary.close();
 
+    mySample.fileSize = fileSize;
 
     //Indexing a file
     mySample.indexSamples(smpl, indexArray);
@@ -55,7 +62,13 @@ int main(int argc, char *argv[])
     //Find the size in each species code here COMPLETE THIS
     int size0, size1, size2, size3, size4;
 
+    size0 = indexArray[1] - indexArray[0];
+    size1 = indexArray[2] - indexArray[1];
+    size2 = indexArray[3] - indexArray[2];
+    size3 = indexArray[4] - indexArray[3];
+    size4 = fileSize - indexArray[4];
 
+    delete[] smpl;
 
     //-----printing some outputs---------
 
