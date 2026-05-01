@@ -7,10 +7,10 @@ DEPS          := geneBank.h customErrorClass.h
 
 .PHONY: clean all
 
-all: geneRecords
+all: geneProgram
 
 clean:
-	rm $(OBJS) geneRecords
+	rm $(OBJS) geneProgram
 
 geneBank.o: geneBank.cpp ${DEPS}
 	$(CC) -c -o $@ $(CFLAGS) $<
