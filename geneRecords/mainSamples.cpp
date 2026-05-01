@@ -32,14 +32,12 @@ int main(int argc, char *argv[])
     
     inputBinary.open(argv[1], ios::in|ios::binary);
     //get the file size here COMPLETE THIS .......
-    inputBinary.seekg(0, ios::end);
-    fileSize = inputBinary.tellg() / entryByte;
-    inputBinary.seekg(0, ios::beg);
+
 
     smpl = new Sample[fileSize];
 
     //Reading a binary file into a struct array here COMPLETE THIS ....
-    inputBinary.read((char*)smpl, fileSize * entryByte);
+
 
     inputBinary.close();
 
@@ -48,9 +46,6 @@ int main(int argc, char *argv[])
     mySample.sort(smpl, fileSize-1);
 
     //Writing sorted file to a new binary file here COMPLETE THIS
-    sortedBinary.open("samples.bin", ios::out|ios::binary);
-    sortedBinary.write((char*)smpl, fileSize * sizeof(Sample));
-    sortedBinary.close();
 
 
     //Indexing a file
