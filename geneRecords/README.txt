@@ -1,0 +1,1 @@
+This is the full implementation of our binary files assignment with all the screen shots included. All functions are operable and working. We used a counting sort for our data as a comparison sort would result in longer times with our current data set.
